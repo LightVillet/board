@@ -5,13 +5,13 @@ from app import app
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
-        name = request.form['name']
-        session['board_name'] = name
-        return redirect(url_for('board', name=name))
+        board_name = request.form['board_name']
+        session['board_name'] = board_name
+        return redirect(url_for('board', board_name=board_name))
     else:
         return render_template("index.html")
 
 
 @app.route('/board')
-def board(name):
-    return name
+def board(board_name):
+    return board_name
