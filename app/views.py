@@ -12,6 +12,6 @@ def index():
         return render_template("index.html")
 
 
-@app.route('/board')
+@app.route('/board/<board_name>')
 def board(board_name):
     return board_name
