@@ -73,16 +73,15 @@ function createElem(e)
 	//newDiv.append(empty);
 
 }
-renderElem(elem)
 
 document.addEventListener('dblclick', function (e) {
 	//let id = send_back(e);
 	createElem(e);
 });
-let button_test = document.body.getElementsByClassName("button_test")[0];
-let button_test_2 = document.body.getElementsByClassName("button_test")[1];
-drag_n_drop(button_test);
-drag_n_drop(button_test_2);
+// let button_test = document.body.getElementsByClassName("button_test")[0];
+// let button_test_2 = document.body.getElementsByClassName("button_test")[1];
+// drag_n_drop(button_test);
+// drag_n_drop(button_test_2);
 
 
 function send_back(e)
@@ -91,13 +90,39 @@ function send_back(e)
 	return;
 }
 
-function render()
+function render(board_name)
 {
 	let xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("GET", '/board/asd', false);
-	let jsonData = JSON.parse(xmlHttp.responseText);
+	xmlHttp.open("GET", '/board/' + board_name + '/update', false);
+	xmlHttp.send( null );
+	let text = xmlHttp.responseText;
+	// alert(text);
+	if (!text)
+	{
+		return;
+	}
+	let jsonData = JSON.parse(text);
+
+	let elements = document.getElementsByClassName('divasd');
+	for (let e in elements)
+	{
+		e.remove;
+	}
 	for (let i in jsonData)
 	{
-		
+		const newDiv = document.createElement("div");
+		const newInput = document.createElement("input");
+		document.body.appendChild(newDiv);
+		newDiv.style.position = 'absolute';
+		newDiv.style.left = jsonData[i]['x'];
+		newDiv.style.top = jsonData[i]['y'];
+		newDiv.className = "divasd";
+		newDiv.id = jsonData[i]['id'];
+		newInput.className = "inputField";
+		drag_n_drop(newDiv);
+		newDiv.append(newInput);
+		const empty = document.createElement("h1");
+		const text = document.createTextNode("Hello"); 
+		empty.append(text);
 	}
 }

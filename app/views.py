@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app
 from .models import Board
 from app import db
@@ -36,11 +36,11 @@ def board(board_name):
             _board = Board(name=board_name)
             db.session.add(board)
             db.session.commit()
-        print(board.name)
+        print(_board.name)
         return render_template("board.html", board_name=board_name)
 
 
 @app.route('/board/<board_name>/update')
 def board_update(board_name):
     if request.method == 'GET':
-        return {'id': 1, 'x': 100, 'y': 20}
+        return jsonify([{'id': 1, 'x': 100, 'y': 20}])

@@ -1,15 +1,16 @@
 <html>
 	<head>
+		<title>
+			{{ board_name }}
+		</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
 	</head>
+
 	<body class="bodyMain">
-		<button class="button_test">
-			test
-	</button>
-		<button class="button_test" onclick="render({{ data }})">
-			test2
-		</button>
 		<script src="{{ url_for('static', filename = 'js/board.js') }}"></script>
+		<script>
+			render("{{ board_name }}");
+		</script>
 	
 	</body>
 </html>
