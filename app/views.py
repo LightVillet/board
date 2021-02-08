@@ -82,7 +82,10 @@ def board_update(board_name):
         y = data['y']
         id = data['id']
         text_fields = TextField.query.all()
-        tf = list(filter(lambda t: t.id == id and t.board_id == _board.id, text_fields))[0]
+        print(id, _board.id)
+        # print(text_fields)
+        tf = list(filter(lambda t: t.board_id == _board.id and t.id == id, text_fields))[0]
         tf.x = x
         tf.y = y
+        db.session.commit()
         return 'test'

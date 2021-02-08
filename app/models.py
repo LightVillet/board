@@ -17,4 +17,4 @@ class TextField(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
 
     def __repr__(self):
-        return '<TextField {}-{}>'.format(self.field_id, self.id)
+        return '<TextField {}-{}>'.format(self.board_id, self.id)
