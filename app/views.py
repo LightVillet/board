@@ -40,7 +40,7 @@ def board(board_name):
         return render_template("board.html", board_name=board_name)
 
 
-@app.roure('/board/<board_name>/update')
+@app.route('/board/<board_name>/update')
 def board_update(board_name):
     if request.method == 'GET':
         return {'id': 1, 'x': 100, 'y': 20}
