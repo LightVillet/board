@@ -14,4 +14,4 @@ def index():
 
 @app.route('/board/<board_name>')
 def board(board_name):
-    return board_name
+    return render_template("board.html")
