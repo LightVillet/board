@@ -62,7 +62,7 @@ function put(e, board_name, id)
 	let dic = {};
 	dic["x"] = e.pageX;
 	dic["y"] = e.pageY;
-	dic["id"] = id;
+	dic["id"] = +id;
 	xmlHttp.send( JSON.stringify(dic) );
 }
 
