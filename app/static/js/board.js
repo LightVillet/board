@@ -17,7 +17,7 @@ function drag_n_drop (elem, board_name)
 			{
 					elem.style.left = e.pageX - shiftX + "px";
 					elem.style.top = e.pageY - shiftY + "px";
-					put(e, board_name, elem.id);
+					//put(e, board_name, elem.id);
 			}
 			document.onmousemove = function(e) 
 			{
@@ -54,6 +54,7 @@ function createElem(e, board_name)
 	dic["x"] = e.pageX;
 	dic["y"] = e.pageY;
 	xmlHttp.send(JSON.stringify(dic));
+	
 }
 function put(e, board_name, id)
 {
@@ -109,13 +110,27 @@ function render(board_name)
 	}
 }
 
-function ferp(board_name)
+function listen()
 {
 
-    setInterval(function(){render(board_name)},1000);
+  //  setInterval(function(){render(board_name)},1000);
 
-
-    document.addEventListener('dblclick', function (e) {
-        createElem(e, board_name);
-    });
+  let socket = new WebSocket("wss://localhost");
+  socket.onopen = function(e) {
+	console.log("[open] Connection established");
+	console.log("Sending to server");
+	socket.send("1");
+  };
+	socket.onmessage = function(event) {
+		console.log(`[message] Data received from server: ${event.data}`);
+	  };
+  socket.onclose = function(event) {
+	if (event.wasClean) {
+	  console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+	} else {
+	  // e.g. server process killed or network down
+	  // event.code is usually 1006 in this case
+	  console.log('[close] Connection died');
+	}
+  };
 }
