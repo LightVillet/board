@@ -1,7 +1,14 @@
 from flask import render_template, request, redirect, url_for, session, jsonify, json
 from app import app
 from .models import Board, TextField
-from app import db
+from app import db, socketio
+from flask_socketio import send
+
+
+@socketio.event
+def handle_message(data):
+    print('received message: ' + data)
+    send('2')
 
 
 @app.route('/', methods=['POST', 'GET'])
