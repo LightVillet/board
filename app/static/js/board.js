@@ -1,5 +1,5 @@
 "use strict"
-function drag_n_drop (elem)
+function drag_n_drop (elem, board_name)
 {
 	elem.onmouseover = function(e)
 	{
@@ -17,6 +17,7 @@ function drag_n_drop (elem)
 			{
 					elem.style.left = e.pageX - shiftX + "px";
 					elem.style.top = e.pageY - shiftY + "px";
+					put(e, board_name, elem.id);
 			}
 			document.onmousemove = function(e) 
 			{
@@ -54,6 +55,17 @@ function createElem(e, board_name)
 	dic["y"] = e.pageY;
 	xmlHttp.send(JSON.stringify(dic));
 }
+function put(e, board_name, id)
+{
+	let xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("PUT", '/board/' + board_name + '/update', false);
+	let dic = {};
+	dic["x"] = e.pageX;
+	dic["y"] = e.pageY;
+	dic["id"] = id;
+	xmlHttp.send( JSON.stringify(dic) );
+}
+
 
 function render(board_name)
 {
@@ -89,7 +101,7 @@ function render(board_name)
 		newDiv.className = "divasd";
 		newDiv.id = jsonData[i]['id'];
 		newInput.className = "inputField";
-		drag_n_drop(newDiv);
+		drag_n_drop(newDiv, board_name);
 		newDiv.append(newInput);
 		const empty = document.createElement("h1");
 		const text = document.createTextNode("Hello");
