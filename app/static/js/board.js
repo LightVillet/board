@@ -3,7 +3,7 @@ function drag_n_drop (elem)
 {
 	elem.onmouseover = function(e)
 	{
-		console.log(elem.className, "over");
+//		console.log(elem.className, "over");
 		elem.onmousedown = function(e)
 		{
 			let shiftX = e.clientX - elem.getBoundingClientRect().left;
@@ -35,7 +35,7 @@ function drag_n_drop (elem)
 		while (relatedTarget) {
 			if (relatedTarget == elem)
 			{
-				console.log(relatedTarget.className, "out");
+//				console.log(relatedTarget.className, "out");
 				elem.onmousedown = null;
 				return;
 			}
@@ -45,53 +45,19 @@ function drag_n_drop (elem)
 
 	}
 }
-function createElem(e)
+function createElem(e, board_name)
 {
 	let xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("POST", '/board/asd', false);
+	xmlHttp.open("POST", '/board/' + board_name + '/update', false);
 	let dic = {};
 	dic["x"] = e.pageX;
 	dic["y"] = e.pageY;
-	xmlHttp.send( dic );
-	let jsonData = JSON.parse(xmlHttp.responseText);
-	let id = jsonData['id'];
-	console.log( id );
-	const newDiv = document.createElement("div");
-	const newInput = document.createElement("input");
-	document.body.appendChild(newDiv);
-	newDiv.style.position = 'absolute';
-	newDiv.style.left = e.pageX;
-	newDiv.style.top = e.pageY;
-	newDiv.className = "divasd";
-	newDiv.id = id;
-	newInput.className = "inputField";
-	drag_n_drop(newDiv);
-	newDiv.append(newInput);
-	const empty = document.createElement("h1");
-	const text = document.createTextNode("Hello"); 
-	empty.append(text);
-	//newDiv.append(empty);
-
-}
-
-document.addEventListener('dblclick', function (e) {
-	//let id = send_back(e);
-	createElem(e);
-});
-// let button_test = document.body.getElementsByClassName("button_test")[0];
-// let button_test_2 = document.body.getElementsByClassName("button_test")[1];
-// drag_n_drop(button_test);
-// drag_n_drop(button_test_2);
-
-
-function send_back(e)
-{
-	
-	return;
+	xmlHttp.send(JSON.stringify(dic));
 }
 
 function render(board_name)
 {
+//    console.log('asd');
 	let xmlHttp = new XMLHttpRequest();
 	xmlHttp.open("GET", '/board/' + board_name + '/update', false);
 	xmlHttp.send( null );
@@ -101,13 +67,17 @@ function render(board_name)
 	{
 		return;
 	}
+	console.log(text);
 	let jsonData = JSON.parse(text);
 
 	let elements = document.getElementsByClassName('divasd');
-	for (let e in elements)
+	while (elements.length)
 	{
-		e.remove;
+		elements[0].remove();
 	}
+	elements = document.getElementsByClassName('divasd');
+	console.log(jsonData);
+	console.log(elements);
 	for (let i in jsonData)
 	{
 		const newDiv = document.createElement("div");
@@ -122,7 +92,18 @@ function render(board_name)
 		drag_n_drop(newDiv);
 		newDiv.append(newInput);
 		const empty = document.createElement("h1");
-		const text = document.createTextNode("Hello"); 
+		const text = document.createTextNode("Hello");
 		empty.append(text);
 	}
+}
+
+function ferp(board_name)
+{
+
+    setInterval(function(){render(board_name)},1000);
+
+
+    document.addEventListener('dblclick', function (e) {
+        createElem(e, board_name);
+    });
 }
