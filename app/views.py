@@ -77,4 +77,12 @@ def board_update(board_name):
         db.session.commit()
         return jsonify({'id': tf_.id})
     elif request.method == 'PUT':
+        data = json.loads(request.data)
+        x = data['x']
+        y = data['y']
+        id = data['id']
+        text_fields = TextField.query.all()
+        tf = list(filter(lambda t: t.id == id and t.board_id == _board.id, text_fields))[0]
+        tf.x = x
+        tf.y = y
         return 'test'
