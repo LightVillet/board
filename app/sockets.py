@@ -20,7 +20,7 @@ def connect():
             'y': tex_field.y
         })
 
-    emit('init', data, to=session['board_name'])
+    emit('init', data)
 
 
 @socketio.event
