@@ -79,8 +79,14 @@ function createElement(data)
 	newInput.className = "inputField";
 	drag_n_drop(newDiv);
 	newDiv.append(newInput);
-
+	newDiv.innerText = data["text"];
 };
+
+function editElement(data)
+{
+	const elem = document.getElementById(data["id"]);
+	elem.innerText = data["text"];
+}
 
 function deleteElement(data)
 {
@@ -103,6 +109,10 @@ socket.on('init', function(data) {
 	{
 		createElement(data[elem]);
 	}
+});
+
+socket.on('edit', function(data) {
+
 });
 
 socket.on('delete', function(data) {
