@@ -87,7 +87,7 @@ function createElement(data)
 
 function editElement(data)
 {
-	const elem = document.getElementById(data["id"]);
+	const elem = document.getElementById(data["id"]).getElementsByClassName("inputField")[0];
 	elem.innerText = data["text"];
 }
 
