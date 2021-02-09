@@ -23,4 +23,4 @@ def create_text_field(x, y):
     new_text_field = TextField(id=new_id, x=x, y=y, board_id=current_board.id)
     db.session.add(new_text_field)
     db.session.commit()
-
+    return new_id
