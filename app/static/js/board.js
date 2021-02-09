@@ -112,6 +112,7 @@ socket.on('init', function(data) {
 });
 
 socket.on('edit', function(data) {
+	console.log("edit " + data["id"]);
 	editElement(data);
 });
 
