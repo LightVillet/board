@@ -54,7 +54,7 @@ function update(data)
 	socket.emit('update', data);
 }
 
-function render(action, data)
+function renderElement(action, data)
 {
 	switch (action)
 	{
@@ -85,7 +85,10 @@ socket.on('connect', function() {
 	//socket.emit('my_event', {data : '1'});
 });
 socket.on('update', function(data) {
-	render(data["action"], data["data"]);
+	for (elem in data["data"])
+	{
+		renderElement(data["action"], elem);
+	}
 	console.log(data);
 });
 
