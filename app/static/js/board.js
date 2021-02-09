@@ -1,5 +1,5 @@
 "use strict"
-function drag_n_drop (elem, board_name)
+function drag_n_drop (elem)
 {
 	elem.onmouseover = function(e)
 	{
@@ -17,7 +17,6 @@ function drag_n_drop (elem, board_name)
 			{
 					elem.style.left = e.pageX - shiftX + "px";
 					elem.style.top = e.pageY - shiftY + "px";
-					update({"action" : "move", "data" : {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top}});
 			}
 			document.onmousemove = function(e) 
 			{
@@ -25,6 +24,7 @@ function drag_n_drop (elem, board_name)
 			}
 			elem.onmouseup = function()
 			{
+                update({"action" : "move", "data" : {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top}});
 				document.onmousemove = null;
 				elem.onmouseup = null;
 			}
@@ -85,24 +85,17 @@ function render(action, data)
 			newDiv.className = "divasd";
 			newDiv.id = data["id"];
 			newInput.className = "inputField";
-			drag_n_drop(newDiv, board_name);
+			drag_n_drop(newDiv);
 			newDiv.append(newInput);
 	}
 };
 
-function init()
-{
-
-  //  setInterval(function(){render(board_name)},1000);
-
-	let socket = new io();
-	socket.on('connect', function() {
-		console.log("Connected server");
-		//socket.emit('my_event', {data : '1'});
-	});
-	socket.on('update', function(data) {
-		render(data["action"], data["data"]);
-		console.log(data);
-	});
-
-}
+let socket = new io();
+socket.on('connect', function() {
+    console.log("Connected server");
+    //socket.emit('my_event', {data : '1'});
+});
+socket.on('update', function(data) {
+    render(data["action"], data["data"]);
+    console.log(data);
+});

@@ -41,4 +41,4 @@ def update(message):
         current_text_field.y = y
         db.session.commit()
 
-        emit('update', message, to=session['board_name'])
+    emit('update', message, to=session['board_name'])
