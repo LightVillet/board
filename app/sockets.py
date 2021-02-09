@@ -24,20 +24,18 @@ def connect():
 
 
 @socketio.event
-def create(message):
-    data = message['data']
+def create(data):
     x = data['x']
     y = data['y']
 
     new_id = create_text_field(x, y)
-    message['data']['id'] = new_id
+    data['id'] = new_id
 
-    emit('update', message, to=session['board_name'])
+    emit('update', data, to=session['board_name'])
 
 
 @socketio.event
-def move(message):
-    data = message['data']
+def move(data):
     x = data['x']
     y = data['y']
     text_field_id = data['id']
@@ -47,17 +45,16 @@ def move(message):
     current_text_field.y = y
     db.session.commit()
 
-    emit('update', message, to=session['board_name'])
+    emit('update', data, to=session['board_name'])
 
 
 @socketio.event
-def delete(message):
-    data = message['data']
+def delete(data):
 
     text_field_id = data['id']
     current_text_field = TextField.query.get(text_field_id)
     db.session.delete(current_text_field)
     db.session.commit()
 
-    emit('delete', message, to=session['board_name'])
+    emit('delete', data, to=session['board_name'])
 
