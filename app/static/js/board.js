@@ -94,6 +94,7 @@ socket.on('connect', function() {
 });
 
 socket.on('move', function(data) {
+	console.log("move  " + data["id"]);
 	moveElement(data);
 });
 socket.on('init', function(data) {
@@ -106,17 +107,17 @@ socket.on('init', function(data) {
 });
 
 socket.on('delete', function(data) {
+	console.log("delete " + data["id"]);
 	deleteElement(data);
 });
 
 socket.on('create', function(data) {
-	console.log("create");
+	console.log("create " + data["id"]);
 	createElement(data);
 });
 
 document.addEventListener('dblclick', function (e) {
 	const data = { "x" : e.pageX, "y" : e.pageY };
-	console.log('create');
 	socket.emit('create', data);
 	
 });
