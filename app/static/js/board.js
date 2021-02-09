@@ -66,7 +66,7 @@ function createElement(data)
 	const newDiv = document.createElement("div");
 	const newInput = document.createElement("div");
 	newInput.contentEditable = true;
-	newInput.innerText = data["text"];
+	newInput.innerText = data["text"] ? data["text"] : "";
 	document.body.appendChild(newDiv);
 	const newButton = document.createElement("button");
 	newButton.className = "buttonClose";
