@@ -1,14 +1,7 @@
-from flask import render_template, request, redirect, url_for, session, jsonify, json
+from flask import render_template, request, redirect, url_for, session
 from app import app
-from .models import Board, TextField
+from .models import Board
 from app import db, socketio
-from flask_socketio import send
-
-
-@socketio.event
-def handle_message(data):
-    print('received message: ' + data)
-    send('2')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -23,11 +16,6 @@ def index():
 
 @app.route('/board/<board_name>')
 def board(board_name):
-    if 'board_name' not in session:
-        return 'error session'
-    if session['board_name'] != board_name:
-        return 'error name'
-
     boards = Board.query.all()
     _board = None
     for b in boards:
