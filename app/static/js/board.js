@@ -64,6 +64,7 @@ function renderElement(action, data)
 			elem.style.top = data["y"];
 			break;
 		case "create":
+			console.log("create" + data)
 			const newDiv = document.createElement("div");
 			const newInput = document.createElement("input");
 			document.body.appendChild(newDiv);
@@ -75,6 +76,7 @@ function renderElement(action, data)
 			newInput.className = "inputField";
 			drag_n_drop(newDiv);
 			newDiv.append(newInput);
+			break;
 	}
 };
 
@@ -89,9 +91,11 @@ socket.on('update', function(data) {
 	console.log(data);
 });
 socket.on('create', function(data) {
+
 	for (let elem in data)
 	{
-		renderElement({"action" : "create", "data" : data });
+		console.log(data[elem]);
+		renderElement("create", data[elem]);
 	}
 });
 
