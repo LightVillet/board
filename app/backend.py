@@ -14,7 +14,7 @@ def get_board():
 
 def create_text_field(x, y):
     current_board = get_board()
-    text_fields_list = list(filter(lambda tf: tf.board_id == current_board.id, TextField.query.all()))
+    text_fields_list = TextField.query.all()
     text_fields_ids = [t.id for t in text_fields_list]
     if text_fields_ids:
         new_id = max(text_fields_ids) + 1
