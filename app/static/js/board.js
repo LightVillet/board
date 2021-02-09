@@ -1,5 +1,5 @@
 "use strict"
-function drag_n_drop (elem, board_name)
+function drag_n_drop (elem)
 {
 	elem.onmouseover = function(e)
 	{
@@ -16,17 +16,18 @@ function drag_n_drop (elem, board_name)
 			function moveAt(e)
 			{
 					elem.style.left = e.pageX - shiftX + "px";
-					elem.style.top = e.pageY - shiftY + "px";
-					update({"action" : "move", "data" : {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top}});
+					elem.style.top = e.pageY - shiftY + "px";	
 			}
 			document.onmousemove = function(e) 
 			{
 				moveAt(e);
+				
 			}
 			elem.onmouseup = function()
 			{
 				document.onmousemove = null;
 				elem.onmouseup = null;
+				update({"action" : "move", "data" : {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top}});
 			}
 		}
 	}
@@ -72,7 +73,7 @@ function render(action, data)
 			newDiv.className = "divasd";
 			newDiv.id = data["id"];
 			newInput.className = "inputField";
-			drag_n_drop(newDiv, board_name);
+			drag_n_drop(newDiv);
 			newDiv.append(newInput);
 	}
 };
