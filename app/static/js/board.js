@@ -85,12 +85,16 @@ socket.on('connect', function() {
 	//socket.emit('my_event', {data : '1'});
 });
 socket.on('update', function(data) {
-	for (let elem in data["data"])
-	{
-		renderElement(data["action"], elem);
-	}
+	renderElement(data["action"], data["data"]);
 	console.log(data);
 });
+socket.on('create', function(data) {
+	for (let elem in data)
+	{
+		renderElement({"action" : "create", "data" : data });
+	}
+});
+
 
 document.addEventListener('dblclick', function (e) {
 	const data = { "action" : "create", "data" : { "x" : e.pageX, "y" : e.pageY }};
