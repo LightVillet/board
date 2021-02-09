@@ -85,7 +85,7 @@ socket.on('connect', function() {
 	//socket.emit('my_event', {data : '1'});
 });
 socket.on('update', function(data) {
-	for (elem in data["data"])
+	for (let elem in data["data"])
 	{
 		renderElement(data["action"], elem);
 	}
