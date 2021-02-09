@@ -27,7 +27,7 @@ function drag_n_drop (elem)
 			{
 				document.onmousemove = null;
 				elem.onmouseup = null;
-				update({"action" : "move", "data" : {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top}});
+				socket.emit('move' , {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top});
 			}
 		}
 	}
@@ -54,53 +54,66 @@ function update(data)
 	socket.emit('update', data);
 }
 
-function renderElement(action, data)
+function moveElement(data)
 {
-	switch (action)
-	{
-		case "move":
-			const elem = document.getElementById(data["id"]);
-			elem.style.left = data["x"];
-			elem.style.top = data["y"];
-			break;
-		case "create":
-			console.log("create" + data)
-			const newDiv = document.createElement("div");
-			const newInput = document.createElement("input");
-			document.body.appendChild(newDiv);
-			newDiv.style.position = 'absolute';
-			newDiv.style.left = data["x"];
-			newDiv.style.top = data["y"];
-			newDiv.className = "divasd";
-			newDiv.id = data["id"];
-			newInput.className = "inputField";
-			drag_n_drop(newDiv);
-			newDiv.append(newInput);
-			break;
-	}
+	const elem = document.getElementById(data["id"]);
+	elem.style.left = data["x"];
+	elem.style.top = data["y"];
+}
+
+function createElement(data)
+{
+	const newDiv = document.createElement("div");
+	const newInput = document.createElement("div");
+	newInput.contentEditable = true;
+	document.body.appendChild(newDiv);
+	newDiv.style.position = 'absolute';
+	newDiv.style.left = data["x"];
+	newDiv.style.top = data["y"];
+	newDiv.className = "divasd";
+	newDiv.id = data["id"];
+	newInput.className = "inputField";
+	drag_n_drop(newDiv);
+	newDiv.append(newInput);
+	const newButton = document.createElement("button");
+	newButton.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
 };
 
+function deleteElement(data)
+{
+	const elem = document.getElementById(data["id"]);
+	elem.remove();
+};
 
 let socket = new io();
 socket.on('connect', function() {
 	console.log("Connected server");
-	//socket.emit('my_event', {data : '1'});
 });
-socket.on('update', function(data) {
-	renderElement(data["action"], data["data"]);
-	console.log(data);
+
+socket.on('move', function(data) {
+	moveElement(data);
 });
-socket.on('create', function(data) {
+socket.on('init', function(data) {
 
 	for (let elem in data)
 	{
 		console.log(data[elem]);
-		renderElement("create", data[elem]);
+		createElement(data[elem]);
 	}
 });
 
+socket.on('delete', function(data) {
+	deleteElement(data);
+});
+
+socket.on('create', function(data) {
+	console.log("create");
+	createElement(data);
+});
 
 document.addEventListener('dblclick', function (e) {
-	const data = { "action" : "create", "data" : { "x" : e.pageX, "y" : e.pageY }};
-	update( data );
+	const data = { "x" : e.pageX, "y" : e.pageY };
+	console.log('create');
+	socket.emit('create', data);
+	
 });
