@@ -67,6 +67,9 @@ function createElement(data)
 	const newInput = document.createElement("div");
 	newInput.contentEditable = true;
 	document.body.appendChild(newDiv);
+	const newButton = document.createElement("button");
+	newButton.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
+	newDiv.appendChild(newButton);
 	newDiv.style.position = 'absolute';
 	newDiv.style.left = data["x"];
 	newDiv.style.top = data["y"];
@@ -75,8 +78,7 @@ function createElement(data)
 	newInput.className = "inputField";
 	drag_n_drop(newDiv);
 	newDiv.append(newInput);
-	const newButton = document.createElement("button");
-	newButton.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
+
 };
 
 function deleteElement(data)
