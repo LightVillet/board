@@ -17,7 +17,7 @@ function drag_n_drop (elem, board_name)
 			{
 					elem.style.left = e.pageX - shiftX + "px";
 					elem.style.top = e.pageY - shiftY + "px";
-					//put(e, board_name, elem.id);
+					update({"action" : "move", "data" : {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top}});
 			}
 			document.onmousemove = function(e) 
 			{
@@ -48,12 +48,6 @@ function drag_n_drop (elem, board_name)
 }
 function createElem(e, board_name)
 {
-	let xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("POST", '/board/' + board_name + '/update', false);
-	let dic = {};
-	dic["x"] = e.pageX;
-	dic["y"] = e.pageY;
-	xmlHttp.send(JSON.stringify(dic));
 	
 }
 function put(e, board_name, id)
@@ -67,70 +61,48 @@ function put(e, board_name, id)
 	xmlHttp.send( JSON.stringify(dic) );
 }
 
-
-function render(board_name)
+function update(data)
 {
-//    console.log('asd');
-	let xmlHttp = new XMLHttpRequest();
-	xmlHttp.open("GET", '/board/' + board_name + '/update', false);
-	xmlHttp.send( null );
-	let text = xmlHttp.responseText;
-	// alert(text);
-	if (!text)
-	{
-		return;
-	}
-	console.log(text);
-	let jsonData = JSON.parse(text);
-
-	let elements = document.getElementsByClassName('divasd');
-	while (elements.length)
-	{
-		elements[0].remove();
-	}
-	elements = document.getElementsByClassName('divasd');
-	console.log(jsonData);
-	console.log(elements);
-	for (let i in jsonData)
-	{
-		const newDiv = document.createElement("div");
-		const newInput = document.createElement("input");
-		document.body.appendChild(newDiv);
-		newDiv.style.position = 'absolute';
-		newDiv.style.left = jsonData[i]['x'];
-		newDiv.style.top = jsonData[i]['y'];
-		newDiv.className = "divasd";
-		newDiv.id = jsonData[i]['id'];
-		newInput.className = "inputField";
-		drag_n_drop(newDiv, board_name);
-		newDiv.append(newInput);
-		const empty = document.createElement("h1");
-		const text = document.createTextNode("Hello");
-		empty.append(text);
-	}
+	socket.emit('update', data);
 }
 
-function listen()
+function render(action, data)
+{
+	switch (action)
+	{
+		case "move":
+			const elem = document.getElementById(data["id"]);
+			elem.style.left = data["x"];
+			elem.style.top = data["y"];
+			break;
+		case "create":
+			const newDiv = document.createElement("div");
+			const newInput = document.createElement("input");
+			document.body.appendChild(newDiv);
+			newDiv.style.position = 'absolute';
+			newDiv.style.left = data["x"];
+			newDiv.style.top = data["y"];
+			newDiv.className = "divasd";
+			newDiv.id = data["id"];
+			newInput.className = "inputField";
+			drag_n_drop(newDiv, board_name);
+			newDiv.append(newInput);
+	}
+};
+
+function init()
 {
 
   //  setInterval(function(){render(board_name)},1000);
 
-  let socket = new WebSocket("wss://localhost");
-  socket.onopen = function(e) {
-	console.log("[open] Connection established");
-	console.log("Sending to server");
-	socket.send("1");
-  };
-	socket.onmessage = function(event) {
-		console.log(`[message] Data received from server: ${event.data}`);
-	  };
-  socket.onclose = function(event) {
-	if (event.wasClean) {
-	  console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-	} else {
-	  // e.g. server process killed or network down
-	  // event.code is usually 1006 in this case
-	  console.log('[close] Connection died');
-	}
-  };
+	let socket = new io();
+	socket.on('connect', function() {
+		console.log("Connected server");
+		//socket.emit('my_event', {data : '1'});
+	});
+	socket.on('update', function(data) {
+		render(data["action"], data["data"]);
+		console.log(data);
+	});
+
 }
