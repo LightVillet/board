@@ -1,5 +1,5 @@
 from flask import session
-from models import Board, TextField
+from .models import Board, TextField
 from app import db
 
 
