@@ -66,6 +66,7 @@ function createElement(data)
 	const newDiv = document.createElement("div");
 	const newInput = document.createElement("div");
 	newInput.contentEditable = true;
+	newInput.innerText = data["text"];
 	document.body.appendChild(newDiv);
 	const newButton = document.createElement("button");
 	newButton.className = "buttonClose";
@@ -79,7 +80,6 @@ function createElement(data)
 	newInput.className = "inputField";
 	drag_n_drop(newDiv);
 	newDiv.append(newInput);
-	newDiv.innerText = data["text"];
 };
 
 function editElement(data)
@@ -112,7 +112,7 @@ socket.on('init', function(data) {
 });
 
 socket.on('edit', function(data) {
-
+	editElement(data);
 });
 
 socket.on('delete', function(data) {
