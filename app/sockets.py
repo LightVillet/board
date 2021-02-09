@@ -31,7 +31,7 @@ def create(data):
     new_id = create_text_field(x, y)
     data['id'] = new_id
 
-    emit('update', data, to=session['board_name'])
+    emit('create', data, to=session['board_name'])
 
 
 @socketio.event
@@ -45,7 +45,7 @@ def move(data):
     current_text_field.y = y
     db.session.commit()
 
-    emit('update', data, to=session['board_name'])
+    emit('move', data, to=session['board_name'])
 
 
 @socketio.event
