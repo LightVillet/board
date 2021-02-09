@@ -8,6 +8,23 @@ from flask_socketio import emit, join_room
 def connect():
     join_room(session['board_name'])
 
+    boards_list = Board.query.all()
+    current_board = None
+    for b in boards_list:
+        if b.name == session['board_name']:
+            current_board = b
+
+    text_fields_list = list(filter(lambda tf: tf.board_id == current_board.id, TextField.query.all()))
+
+    data = []
+    for tex_field in text_fields_list:
+        data.append({
+            'id': tex_field.id,
+            'x': tex_field.x,
+            'y': tex_field.y
+        })
+    emit('create', data, to=session['board_name'])
+
 
 @socketio.event
 def update(message):
