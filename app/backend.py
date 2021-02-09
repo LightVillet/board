@@ -24,3 +24,10 @@ def create_text_field(x, y):
     db.session.add(new_text_field)
     db.session.commit()
     return new_id
+
+
+def get_text_field(text_field_id):
+    current_board = get_board()
+    text_field = list(filter(lambda tf: tf.board_id == current_board.id and tf.id == text_field_id,
+                             TextField.query.all()))[0]
+    return text_field

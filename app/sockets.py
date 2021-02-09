@@ -2,7 +2,7 @@ from flask import session
 from .models import Board, TextField
 from app import db, socketio
 from flask_socketio import emit, join_room
-from .backend import get_board, create_text_field
+from .backend import get_board, create_text_field, get_text_field
 
 
 @socketio.event
@@ -38,9 +38,9 @@ def create(data):
 def move(data):
     x = data['x']
     y = data['y']
-    text_field_id = data['id']
+    text_field_id = int(data['id'])
 
-    current_text_field = TextField.query.get(text_field_id)
+    current_text_field = get_text_field(text_field_id)
     current_text_field.x = x
     current_text_field.y = y
     db.session.commit()
@@ -50,9 +50,9 @@ def move(data):
 
 @socketio.event
 def delete(data):
+    text_field_id = int(data['id'])
 
-    text_field_id = data['id']
-    current_text_field = TextField.query.get(text_field_id)
+    current_text_field = get_text_field(text_field_id)
     db.session.delete(current_text_field)
     db.session.commit()
 
