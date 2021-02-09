@@ -3,15 +3,12 @@
 		<title>
 			{{ board_name }}
 		</title>
+		<link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}"/>
 		<link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
 	</head>
 
 	<body class="bodyMain">
 		<script src="{{ url_for('static', filename = 'js/board.js') }}"></script>
-		<script>
-			init();
-		</script>
-	
 	</body>
 </html>

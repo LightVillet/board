@@ -101,7 +101,6 @@ socket.on('init', function(data) {
 
 	for (let elem in data)
 	{
-		console.log(data[elem]);
 		createElement(data[elem]);
 	}
 });
