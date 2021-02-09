@@ -4,15 +4,26 @@
 }
 .inputField
 {
-	margin-top: 10%;
-	height: 100%;
+	margin-top: 12%;
+	height: 88%;
 	width:100%;
 	background-color:#d8a2a2;
 	
 }
+
+.buttonClose
+{
+	margin-top: 1%;
+	margin-right: 1%;
+	height: 10%;
+	float : right;
+}
+
 .divasd
 {
 	background-color: antiquewhite;
 	width: 300px;
 	height: 300px;
+	border : solid;
+	border-width: 1px;
 }
