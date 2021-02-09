@@ -13,6 +13,7 @@ class TextField(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
+    text = db.Column(db.String)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
 
     def __repr__(self):

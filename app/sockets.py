@@ -17,7 +17,8 @@ def connect():
         data.append({
             'id': tex_field.id,
             'x': tex_field.x,
-            'y': tex_field.y
+            'y': tex_field.y,
+            'text': tex_field.text
         })
 
     emit('init', data)
@@ -58,3 +59,14 @@ def delete(data):
 
     emit('delete', data, to=session['board_name'])
 
+
+@socketio.event
+def edit(data):
+    text_field_id = int(data['id'])
+    text = data['text']
+
+    current_text_field = TextField.query.get_or_404(text_field_id)
+    current_text_field.text = text
+    db.session.commit()
+
+    emit('edit', data, to=session['board_name'])
