@@ -2,7 +2,7 @@ from flask import session
 from .models import Board, TextField
 from app import db, socketio
 from flask_socketio import emit, join_room
-from backend import get_board, create_text_field
+from .backend import get_board, create_text_field
 
 
 @socketio.event
