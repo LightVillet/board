@@ -4,13 +4,13 @@
 			{{ board_name }}
 		</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
-
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
 	</head>
 
 	<body class="bodyMain">
 		<script src="{{ url_for('static', filename = 'js/board.js') }}"></script>
 		<script>
-			listen();
+			init();
 		</script>
 	
 	</body>
