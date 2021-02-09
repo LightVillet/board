@@ -90,5 +90,5 @@ socket.on('update', function(data) {
 
 document.addEventListener('dblclick', function (e) {
 	data = { "action" : "create", "data" : { "x" : e.pageX, "y" : e.pageY }};
-	update({});
+	update(data);
 });
