@@ -40,7 +40,7 @@ def move(data):
     y = data['y']
     text_field_id = int(data['id'])
 
-    current_text_field = get_text_field(text_field_id)
+    current_text_field = TextField.query.get_or_404(text_field_id)
     current_text_field.x = x
     current_text_field.y = y
     db.session.commit()
@@ -52,7 +52,7 @@ def move(data):
 def delete(data):
     text_field_id = int(data['id'])
 
-    current_text_field = get_text_field(text_field_id)
+    current_text_field = TextField.query.get_or_404(text_field_id)
     db.session.delete(current_text_field)
     db.session.commit()
 

@@ -10,8 +10,7 @@ class Board(db.Model):
 
 
 class TextField(db.Model):
-    field_id = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
