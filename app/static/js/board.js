@@ -68,6 +68,7 @@ function createElement(data)
 	newInput.contentEditable = true;
 	document.body.appendChild(newDiv);
 	const newButton = document.createElement("button");
+	newButton.className = "buttonClose";
 	newButton.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
 	newDiv.appendChild(newButton);
 	newDiv.style.position = 'absolute';
