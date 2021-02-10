@@ -2,7 +2,7 @@ from flask import session, abort
 from .models import Board, TextField
 from app import db, socketio
 from flask_socketio import emit, join_room
-from .backend import get_board, create_text_field
+from .backend import get_board, create_field
 
 
 @socketio.event
@@ -11,14 +11,16 @@ def connect():
 
     current_board = get_board()
 
-    text_fields_list = list(filter(lambda tf: tf.board_id == current_board.id, TextField.query.all()))
+    fields_list = list(filter(lambda tf: tf.board_id == current_board.id, TextField.query.all()))
     data = []
-    for tex_field in text_fields_list:
+    for field in fields_list:
         data.append({
-            'id': tex_field.id,
-            'x': tex_field.x,
-            'y': tex_field.y,
-            'text': tex_field.text
+            'id': field.id,
+            'x': field.x,
+            'y': field.y,
+            'text': field.text,
+            'width': field.width,
+            'height': field.height,
         })
 
     emit('init', data)
@@ -28,8 +30,10 @@ def connect():
 def create(data):
     x = data['x']
     y = data['y']
+    width = data['width']
+    height = data['height']
 
-    new_id = create_text_field(x, y)
+    new_id = create_field(x, y)
     data['id'] = new_id
 
     emit('create', data, to=session['board_name'])
@@ -39,11 +43,11 @@ def create(data):
 def move(data):
     x = data['x']
     y = data['y']
-    text_field_id = int(data['id'])
+    field_id = int(data['id'])
 
-    current_text_field = TextField.query.get_or_404(text_field_id)
-    current_text_field.x = x
-    current_text_field.y = y
+    current_field = TextField.query.get_or_404(field_id)
+    current_field.x = x
+    current_field.y = y
     db.session.commit()
 
     emit('move', data, to=session['board_name'])
@@ -51,24 +55,28 @@ def move(data):
 
 @socketio.event
 def delete(data):
-    text_field_id = int(data['id'])
+    field_id = int(data['id'])
     current_board = get_board()
-    current_text_field = TextField.query.get_or_404(text_field_id)
-    if current_text_field.board_id == current_board.id:
+    current_field = TextField.query.get_or_404(field_id)
+    if current_field.board_id == current_board.id:
         abort(404)
-    db.session.delete(current_text_field)
+    db.session.delete(current_field)
     db.session.commit()
 
     emit('delete', data, to=session['board_name'])
 
 
 @socketio.event
-def edit(data):
-    text_field_id = int(data['id'])
+def save(data):
+    field_id = int(data['id'])
     text = data['text']
+    width = data['width']
+    height = data['height']
 
-    current_text_field = TextField.query.get_or_404(text_field_id)
-    current_text_field.text = text
+    current_field = TextField.query.get_or_404(field_id)
+    current_field.text = text
+    current_field.width = width
+    current_field.height = height
     db.session.commit()
 
-    emit('edit', data, to=session['board_name'])
+    emit('save', data, to=session['board_name'])

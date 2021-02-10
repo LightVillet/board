@@ -14,6 +14,8 @@ class TextField(db.Model):
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
     text = db.Column(db.String)
+    width = db.Column(db.Integer)
+    height = db.Column(db.Integer)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
 
     def __repr__(self):

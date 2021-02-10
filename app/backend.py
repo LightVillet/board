@@ -12,15 +12,15 @@ def get_board():
     return current_board
 
 
-def create_text_field(x, y):
+def create_field(x, y):
     current_board = get_board()
-    text_fields_list = TextField.query.all()
-    text_fields_ids = [t.id for t in text_fields_list]
-    if text_fields_ids:
-        new_id = max(text_fields_ids) + 1
+    fields_list = TextField.query.all()
+    fields_ids = [t.id for t in fields_list]
+    if fields_ids:
+        new_id = max(fields_ids) + 1
     else:
         new_id = 1
-    new_text_field = TextField(id=new_id, x=x, y=y, board_id=current_board.id)
-    db.session.add(new_text_field)
+    new_field = TextField(id=new_id, x=x, y=y, board_id=current_board.id)
+    db.session.add(new_field)
     db.session.commit()
     return new_id
