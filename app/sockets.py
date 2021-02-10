@@ -57,8 +57,9 @@ def move(data):
 def delete(data):
     field_id = int(data['id'])
     current_board = get_board()
+
     current_field = Field.query.get_or_404(field_id)
-    if current_field.board_id == current_board.id:
+    if current_field.board_id != current_board.id:
         abort(404)
     db.session.delete(current_field)
     db.session.commit()
@@ -77,7 +78,6 @@ def save(data):
     current_field.data = data
     current_field.width = width
     current_field.height = height
-    current_text_field = Field.query.get_or_404(field_id)
     db.session.commit()
 
     emit('save', data, to=session['board_name'])
