@@ -144,7 +144,7 @@ socket.on('create', function(data) {
 
 document.addEventListener('dblclick', function (e) {
 	const data = {"type" : "text", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px"};
-
+	console.log(data);	
 	socket.emit('create', data);
 	
 });
