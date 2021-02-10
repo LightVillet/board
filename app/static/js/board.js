@@ -2,7 +2,6 @@
 function drag_n_drop (elem)
 {
 	let childElem = elem.getElementsByClassName("divPanel")[0];
-	console.log(elem);
 	childElem.onmouseover = function(e)
 	{
 //		console.log(elem.className, "over");
@@ -79,7 +78,7 @@ function createElement(data)
 	panelDiv.appendChild(ButtonClose);
 	const ButtonSave = document.createElement("button");
 	ButtonSave.className = "buttonClose";
-	ButtonSave.onclick = function() { socket.emit('save', {"id" : newDiv.id, "data" : newInput.innerText}); };
+	ButtonSave.onclick = function() { socket.emit('save', {"id" : newDiv.id, "data" : newInput.innerText, "width" : newDiv.style.width, "height" : newDiv.style.height}); };
 	panelDiv.appendChild(ButtonSave);
 	newDiv.style.position = 'absolute';
 	newDiv.style.left = data["x"];
@@ -102,7 +101,6 @@ function editElement(data)
 	elem.style.width = data["width"];
 	elem.style.height = data["height"];
 	elem.getElementsByClassName("inputField")[0].innerText = data["data"];
-	console.log(elem);
 }
 
 function deleteElement(data)
@@ -144,8 +142,7 @@ socket.on('create', function(data) {
 });
 
 document.addEventListener('dblclick', function (e) {
-	const data = {"type" : "text", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px"};
-	console.log(data);	
+	const data = {"type" : "text", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px"};	
 	socket.emit('create', data);
 	
 });
