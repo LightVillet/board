@@ -77,7 +77,7 @@ def save(data):
     current_field.data = data
     current_field.width = width
     current_field.height = height
-    current_text_field = Field.query.get_or_404(text_field_id)
+    current_text_field = Field.query.get_or_404(field_id)
     db.session.commit()
 
     emit('save', data, to=session['board_name'])
