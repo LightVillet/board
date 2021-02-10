@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, abort
 from .models import Board, TextField
 from app import db, socketio
 from flask_socketio import emit, join_room
@@ -52,8 +52,10 @@ def move(data):
 @socketio.event
 def delete(data):
     text_field_id = int(data['id'])
-
+    current_board = get_board()
     current_text_field = TextField.query.get_or_404(text_field_id)
+    if current_text_field.board_id == current_board.id:
+        abort(404)
     db.session.delete(current_text_field)
     db.session.commit()
 
