@@ -71,12 +71,11 @@ function createElement(data)
 	newDiv.className = "divMain";
 	panelDiv.className = "divPanel";
 	newInput.contentEditable = true;
-	newInput.innerText = data["text"] ? data["data"] : "";
+	newInput.innerText = data["data"] ? data["data"] : "";
 	document.body.appendChild(newDiv);
 	const ButtonClose = document.createElement("button");
 	ButtonClose.className = "buttonClose";
-	ButtonClose.onclick = function() {
-		console.log("delete1 " + data["id"]);  socket.emit('delete', {"id" : newDiv.id}); };
+	ButtonClose.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
 	panelDiv.appendChild(ButtonClose);
 	const ButtonSave = document.createElement("button");
 	ButtonSave.className = "buttonClose";
@@ -85,23 +84,25 @@ function createElement(data)
 	newDiv.style.position = 'absolute';
 	newDiv.style.left = data["x"];
 	newDiv.style.top = data["y"];
-	newDiv.width = data["width"];
-	newDiv.height = data["height"];
+	newDiv.style.width = data["width"];
+	newDiv.style.height = data["height"];
 	newDiv.id = data["id"];
 	newInput.className = "inputField";
 	newDiv.append(panelDiv);
 	newDiv.append(newInput);
-	newDiv.onresize = function() { console.log("resize")};
 	drag_n_drop(newDiv);
-	ro.observe(newDiv);
+	//ro.observe(newDiv);
 };
 
 
 
 function editElement(data)
 {
-	const elem = document.getElementById(data["id"]).getElementsByClassName("inputField")[0];
-	elem.innerText = data["text"];
+	const elem = document.getElementById(data["id"]);
+	elem.style.width = data["width"];
+	elem.style.height = data["height"];
+	elem.getElementsByClassName("inputField")[0].innerText = data["data"];
+	console.log(elem);
 }
 
 function deleteElement(data)
@@ -149,13 +150,15 @@ document.addEventListener('dblclick', function (e) {
 	
 });
 
-var ro = new ResizeObserver(entries => {
-	for (let entry of entries) {
-	  const cr = entry.contentRect;
-	  console.log('Element:', entry.target);
-	  console.log(`Element size: ${cr.width}px x ${cr.height}px`);
-	  console.log(`Element padding: ${cr.top}px ; ${cr.left}px`);
-	  socket.emit('save', {"width" : cr.width, "height" : cr.height});
-	}
-  });
-  
+// var ro = new ResizeObserver(entries => {
+// 	for (let entry of entries) {
+// 	  const cr = entry.contentRect;
+// 	  const data = {"width" : cr.width, "height" : cr.height, "id" : entry.target.id};
+// 	  socket.emit('save', data);
+// 	}
+//   });
+// document.addEventListener("drop", function(e) {
+// 	const data = {"type" : "file", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px", "data" : "asd"};
+// 	console.log(data);	
+// 	socket.emit('create', data);
+// });
