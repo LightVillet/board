@@ -1,5 +1,5 @@
 from flask import session, abort
-from .models import Board, TextField
+from .models import Field
 from app import db, socketio
 from flask_socketio import emit, join_room
 from .backend import get_board, create_text_field
@@ -11,7 +11,7 @@ def connect():
 
     current_board = get_board()
 
-    text_fields_list = list(filter(lambda tf: tf.board_id == current_board.id, TextField.query.all()))
+    text_fields_list = list(filter(lambda tf: tf.board_id == current_board.id, Field.query.all()))
     data = []
     for tex_field in text_fields_list:
         data.append({
@@ -41,7 +41,7 @@ def move(data):
     y = data['y']
     text_field_id = int(data['id'])
 
-    current_text_field = TextField.query.get_or_404(text_field_id)
+    current_text_field = Field.query.get_or_404(text_field_id)
     current_text_field.x = x
     current_text_field.y = y
     db.session.commit()
@@ -53,7 +53,7 @@ def move(data):
 def delete(data):
     text_field_id = int(data['id'])
     current_board = get_board()
-    current_text_field = TextField.query.get_or_404(text_field_id)
+    current_text_field = Field.query.get_or_404(text_field_id)
     if current_text_field.board_id == current_board.id:
         abort(404)
     db.session.delete(current_text_field)
@@ -67,7 +67,7 @@ def edit(data):
     text_field_id = int(data['id'])
     text = data['text']
 
-    current_text_field = TextField.query.get_or_404(text_field_id)
+    current_text_field = Field.query.get_or_404(text_field_id)
     current_text_field.text = text
     db.session.commit()
 
