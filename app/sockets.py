@@ -21,6 +21,7 @@ def connect():
             'data': field.data,
             'width': field.width,
             'height': field.height,
+            'type': field.type
         })
 
     emit('init', data)
@@ -32,8 +33,10 @@ def create(data):
     y = data['y']
     width = data['width']
     height = data['height']
+    data = data.get('data', '')
+    field_type = data['type']
 
-    new_id = create_field(x, y, width, height)
+    new_id = create_field(x, y, width, height, data, field_type)
     data['id'] = new_id
 
     emit('create', data, to=session['board_name'])
@@ -69,15 +72,18 @@ def delete(data):
 
 @socketio.event
 def save(data):
-    field_id = int(data['id'])
-    data = data['data']
-    width = data['width']
-    height = data['height']
+    field_id = data['id']
+    data = data.get('data', None)
+    width = data.get('width', None)
+    height = data.get('height', None)
 
     current_field = Field.query.get_or_404(field_id)
-    current_field.data = data
-    current_field.width = width
-    current_field.height = height
+    if data:
+        current_field.data = data
+    if width:
+        current_field.width = width
+    if height:
+        current_field.height = height
     db.session.commit()
 
     emit('save', data, to=session['board_name'])

@@ -13,10 +13,10 @@ def get_board():
     return current_board
 
 
-def create_field(x, y, height, width):
+def create_field(x, y, height, width, data, field_type):
     current_board = get_board()
 
-    new_field = Field(x=x, y=y, width=width, height=height, board_id=current_board.id)
+    new_field = Field(type=field_type, x=x, y=y, data=data, width=width, height=height, board_id=current_board.id)
     db.session.add(new_field)
     db.session.commit()
 

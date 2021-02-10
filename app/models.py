@@ -13,6 +13,7 @@ class Field(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
+    type = db.Column(db.String)
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)
     data = db.Column(db.String)
