@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, session
 from app import app
 from .models import Board
 from app import db, socketio
+import logging
 
 
 @app.route('/', methods=['POST', 'GET'])

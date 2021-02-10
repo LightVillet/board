@@ -1,4 +1,7 @@
 import os
+import logging
+
+logging.basicConfig(filename=".log", level=logging.INFO)
 
 
 CSRF_ENABLED = True
