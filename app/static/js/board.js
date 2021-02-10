@@ -79,7 +79,7 @@ function createElement(data)
 	panelDiv.appendChild(ButtonClose);
 	const ButtonSave = document.createElement("button");
 	ButtonSave.className = "buttonClose";
-	ButtonSave.onclick = function() { socket.emit('edit', {"id" : newDiv.id, "text" : newInput.innerText}); };
+	ButtonSave.onclick = function() { socket.emit('save', {"id" : newDiv.id, "text" : newInput.innerText}); };
 	panelDiv.appendChild(ButtonSave);
 	newDiv.style.position = 'absolute';
 	newDiv.style.left = data["x"];
@@ -88,7 +88,9 @@ function createElement(data)
 	newInput.className = "inputField";
 	newDiv.append(panelDiv);
 	newDiv.append(newInput);
+	newDiv.onresize = function() { console.log("resize")};
 	drag_n_drop(newDiv);
+	ro.observe(newDiv);
 };
 
 
@@ -122,8 +124,8 @@ socket.on('init', function(data) {
 	}
 });
 
-socket.on('edit', function(data) {
-	console.log("edit " + data["id"]);
+socket.on('save', function(data) {
+	console.log("save " + data["id"]);
 	editElement(data);
 });
 
@@ -142,3 +144,13 @@ document.addEventListener('dblclick', function (e) {
 	socket.emit('create', data);
 	
 });
+
+var ro = new ResizeObserver(entries => {
+	for (let entry of entries) {
+	  const cr = entry.contentRect;
+	  console.log('Element:', entry.target);
+	  console.log(`Element size: ${cr.width}px x ${cr.height}px`);
+	  console.log(`Element padding: ${cr.top}px ; ${cr.left}px`);
+	}
+  });
+  
