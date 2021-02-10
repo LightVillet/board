@@ -71,19 +71,22 @@ function createElement(data)
 	newDiv.className = "divMain";
 	panelDiv.className = "divPanel";
 	newInput.contentEditable = true;
-	newInput.innerText = data["text"] ? data["text"] : "";
+	newInput.innerText = data["text"] ? data["data"] : "";
 	document.body.appendChild(newDiv);
 	const ButtonClose = document.createElement("button");
 	ButtonClose.className = "buttonClose";
-	ButtonClose.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
+	ButtonClose.onclick = function() {
+		console.log("delete1 " + data["id"]);  socket.emit('delete', {"id" : newDiv.id}); };
 	panelDiv.appendChild(ButtonClose);
 	const ButtonSave = document.createElement("button");
 	ButtonSave.className = "buttonClose";
-	ButtonSave.onclick = function() { socket.emit('save', {"id" : newDiv.id, "text" : newInput.innerText}); };
+	ButtonSave.onclick = function() { socket.emit('save', {"id" : newDiv.id, "data" : newInput.innerText}); };
 	panelDiv.appendChild(ButtonSave);
 	newDiv.style.position = 'absolute';
 	newDiv.style.left = data["x"];
 	newDiv.style.top = data["y"];
+	newDiv.width = data["width"];
+	newDiv.height = data["height"];
 	newDiv.id = data["id"];
 	newInput.className = "inputField";
 	newDiv.append(panelDiv);
@@ -140,7 +143,8 @@ socket.on('create', function(data) {
 });
 
 document.addEventListener('dblclick', function (e) {
-	const data = { "x" : e.pageX, "y" : e.pageY };
+	const data = {"type" : "text", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px"};
+
 	socket.emit('create', data);
 	
 });
@@ -151,6 +155,7 @@ var ro = new ResizeObserver(entries => {
 	  console.log('Element:', entry.target);
 	  console.log(`Element size: ${cr.width}px x ${cr.height}px`);
 	  console.log(`Element padding: ${cr.top}px ; ${cr.left}px`);
+	  socket.emit('save', {"width" : cr.width, "height" : cr.height});
 	}
   });
   
