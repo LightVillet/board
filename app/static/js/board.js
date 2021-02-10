@@ -60,6 +60,7 @@ function moveElement(data)
 	const elem = document.getElementById(data["id"]);
 	elem.style.left = data["x"];
 	elem.style.top = data["y"];
+	elem.style.zIndex = 1000;
 }
 
 function createElement(data)
