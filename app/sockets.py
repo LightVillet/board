@@ -72,14 +72,15 @@ def delete(data):
 
 @socketio.event
 def save(data):
+    print(data)
     field_id = data['id']
-    data = data.get('data', None)
+    field_data = data.get('data', None)
     width = data.get('width', None)
     height = data.get('height', None)
 
     current_field = Field.query.get_or_404(field_id)
     if data:
-        current_field.data = data
+        current_field.data = field_data
     if width:
         current_field.width = width
     if height:
