@@ -33,7 +33,7 @@ def create(data):
     width = data['width']
     height = data['height']
 
-    new_id = create_field(x, y)
+    new_id = create_field(x, y, width, height)
     data['id'] = new_id
 
     emit('create', data, to=session['board_name'])
@@ -77,7 +77,7 @@ def save(data):
     current_field.data = data
     current_field.width = width
     current_field.height = height
-    current_text_field = Field.query.get_or_404(text_field_id)
+    current_text_field = Field.query.get_or_404(field_id)
     db.session.commit()
 
     emit('save', data, to=session['board_name'])
