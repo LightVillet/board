@@ -33,10 +33,10 @@ def create(data):
     y = data['y']
     width = data['width']
     height = data['height']
-    data = data.get('data', '')
+    field_data = data.get('data', '')
     field_type = data['type']
 
-    new_id = create_field(x, y, width, height, data, field_type)
+    new_id = create_field(x, y, width, height, field_data, field_type)
     data['id'] = new_id
 
     emit('create', data, to=session['board_name'])
