@@ -1,10 +1,12 @@
 "use strict"
 function drag_n_drop (elem)
 {
-	elem.onmouseover = function(e)
+	let childElem = elem.getElementsByClassName("divPanel")[0];
+	console.log(elem);
+	childElem.onmouseover = function(e)
 	{
 //		console.log(elem.className, "over");
-		elem.onmousedown = function(e)
+		childElem.onmousedown = function(e)
 		{
 			let shiftX = e.clientX - elem.getBoundingClientRect().left;
 			let shiftY = e.clientY - elem.getBoundingClientRect().top;
@@ -23,7 +25,7 @@ function drag_n_drop (elem)
 				moveAt(e);
 				
 			}
-			elem.onmouseup = function()
+			childElem.onmouseup = function()
 			{
 				document.onmousemove = null;
 				elem.onmouseup = null;
@@ -31,7 +33,7 @@ function drag_n_drop (elem)
 			}
 		}
 	}
-	elem.onmouseout = function(e)
+	childElem.onmouseout = function(e)
 	{
 		let relatedTarget = e.relatedTarget;
 		while (relatedTarget) {
@@ -65,22 +67,28 @@ function createElement(data)
 {
 	const newDiv = document.createElement("div");
 	const newInput = document.createElement("div");
+	const panelDiv = document.createElement("div");
+	newDiv.className = "divMain";
+	panelDiv.className = "divPanel";
 	newInput.contentEditable = true;
 	newInput.innerText = data["text"] ? data["text"] : "";
 	document.body.appendChild(newDiv);
-	const newButton = document.createElement("button");
-	newButton.className = "buttonClose";
-	newButton.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
-	newDiv.appendChild(newButton);
+	const ButtonClose = document.createElement("button");
+	ButtonClose.className = "buttonClose";
+	ButtonClose.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
+	panelDiv.appendChild(ButtonClose);
+	const ButtonSave = document.createElement("button");
+	ButtonSave.className = "buttonClose";
+	ButtonSave.onclick = function() { socket.emit('edit', {"id" : newDiv.id, "text" : newInput.innerText}); };
+	panelDiv.appendChild(ButtonSave);
 	newDiv.style.position = 'absolute';
 	newDiv.style.left = data["x"];
 	newDiv.style.top = data["y"];
-	newDiv.className = "divasd";
 	newDiv.id = data["id"];
 	newInput.className = "inputField";
-	newInput.onchange = function() { socket.emit('edit', {"id" : newDiv.id, "text" : newInput.innerText}); }
-	drag_n_drop(newDiv);
+	newDiv.append(panelDiv);
 	newDiv.append(newInput);
+	drag_n_drop(newDiv);
 };
 
 
