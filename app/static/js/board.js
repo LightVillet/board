@@ -78,7 +78,7 @@ function createElement(data)
 	newDiv.className = "divasd";
 	newDiv.id = data["id"];
 	newInput.className = "inputField";
-	newInput.onkeypress = function() { socket.emit('edit', {"id" : newDiv.id, "text" : newInput.innerText}); }
+	newInput.onchange = function() { socket.emit('edit', {"id" : newDiv.id, "text" : newInput.innerText}); }
 	drag_n_drop(newDiv);
 	newDiv.append(newInput);
 };
