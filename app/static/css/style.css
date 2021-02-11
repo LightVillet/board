@@ -7,9 +7,8 @@
 	height: 100%;
 	width:100%;
 	background-color:#d8a2a2;
-	overflow-x: scroll;
-	overflow-y: scroll;
-	
+	overflow-x: auto;
+	overflow-y: auto;
 }
 
 .buttonClose
@@ -19,6 +18,7 @@
 	height: 26px;
 	margin-right: 2px;
 	float: right;
+	background: url(../img/favicon.ico) no-repeat;
 }
 
 .divMain
@@ -29,8 +29,7 @@
 	border: solid;
 	border-width: 1px;
 	resize: both;
-	overflow-x: hidden;
-	overflow-y: hidden;
+	overflow: hidden;
 }
 
 .divPanel

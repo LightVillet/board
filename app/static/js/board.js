@@ -12,7 +12,6 @@ function drag_n_drop (elem)
 			//console.log(button_test.style.left + 0, button_test.style.top + 0, button_y, e.pageX, e.pageY);
 			elem.style.position = 'absolute';
 			moveAt(e);
-			document.body.appendChild(elem);
 			elem.style.zIndex = 1000; 
 			function moveAt(e)
 			{
