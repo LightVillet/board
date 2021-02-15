@@ -72,7 +72,6 @@ def delete(data):
 
 @socketio.event
 def save(data):
-    print(data)
     field_id = data['id']
     field_data = data.get('data', None)
     width = data.get('width', None)
