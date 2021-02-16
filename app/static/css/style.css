@@ -31,7 +31,7 @@
 	height: 30px;
 }
 
-.buttonClose
+.button
 {
 	margin-top: 2px;
 	margin-right: 2px;
@@ -40,30 +40,21 @@
 	margin-right: 2px;
 	float: right;
 	border-radius: 100%;
-	background: url(../img/close.png) no-repeat;
 }
-.buttonClose:hover
+.button:hover
 {
 	border: solid;
 	border-radius:100%;
 	border-color: rgb(0, 0, 0);
 	border-width: 1px;
 }
+
 .buttonSave
 {
-	margin-top: 2px;
-	margin-right: 2px;
-	width: 26px;
-	height: 26px;
-	margin-right: 2px;
-	float: right;
-	border-radius: 100%;
 	background: url(../img/save.png) no-repeat;
 }
-.buttonSave:hover
+
+.buttonClose
 {
-	border: solid;
-	border-radius:100%;
-	border-color: rgb(0, 0, 0);
-	border-width: 1px;
+	background: url(../img/close.png) no-repeat;
 }

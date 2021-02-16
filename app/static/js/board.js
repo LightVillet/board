@@ -1,7 +1,5 @@
 "use strict"
 
-let maxZIndex = 0;
-
 function drag_n_drop (elem)
 {
 	let childElem = elem.getElementsByClassName("divPanel")[0];
@@ -10,7 +8,7 @@ function drag_n_drop (elem)
 		let shiftX = e.clientX - elem.getBoundingClientRect().left;
 		let shiftY = e.clientY - elem.getBoundingClientRect().top;
 		elem.style.position = "absolute";
-		elem.style.zIndex = ++maxZIndex;
+		elem.style.zIndex = 10000;
 		document.onmousemove = function(e) 
 		{
 			elem.style.left = e.pageX - shiftX + "px";
@@ -21,14 +19,19 @@ function drag_n_drop (elem)
 			document.onmousemove = null;
 			elem.onmouseup = null;
 			socket.emit('move' , {
-				"id" : elem.id, 
+				"id" : elem.id,
 				"x" : elem.style.left, 
-				"y" : elem.style.top});
+				"y" : elem.style.top
+			});
 		}
 	}
 	elem.onclick = function(e)
 	{
-		elem.style.zIndex = ++maxZIndex;
+		socket.emit('move' , {
+			"id" : elem.id,
+			"x" : elem.style.left, 
+			"y" : elem.style.top
+		});
 	}
 }
 
@@ -38,7 +41,7 @@ function moveElement(data)
 	const elem = document.getElementById(data["id"]);
 	elem.style.left = data["x"];
 	elem.style.top = data["y"];
-	//elem.style.zIndex = 1000;
+	elem.style.zIndex = data["z"];
 }
 
 function createElement(data)
@@ -52,12 +55,13 @@ function createElement(data)
 	divMain.className = "divMain";
 	divInput.className = "inputField";
 	divPanel.className = "divPanel";
-	buttonClose.className = "buttonClose";
-	buttonSave.className = "buttonSave";
+	buttonClose.className = "button buttonClose";
+	buttonSave.className = "button buttonSave";
 
 	divMain.style.position = 'absolute';
 	divMain.style.left = data["x"];
 	divMain.style.top = data["y"];
+	divMain.style.zIndex = data["z"];
 	divMain.style.width = data["width"];
 	divMain.style.height = data["height"];
 	divMain.id = data["id"];
@@ -108,11 +112,11 @@ socket.on('move', function(data) {
 	moveElement(data);
 });
 socket.on('init', function(data) {
-
-	for (let elem in data)
-	{
-		createElement(data[elem]);
-	}
+	let elems = document.getElementsByClassName("divMain");
+	for (let i = 0; i < elems.length; i++)
+		deleteElement(elems[i].id);
+	for (let i = 0; i < data.length; i++)
+		createElement(data[i]);
 });
 
 socket.on('save', function(data) {
