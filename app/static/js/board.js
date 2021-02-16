@@ -2,39 +2,50 @@
 
 function drag_n_drop (elem)
 {
-	let childElem = elem.getElementsByClassName("divPanel")[0];
-	childElem.onmousedown = function(e)
+	let childButtonClose = elem.getElementsByClassName("buttonClose")[0];
+	let childButtonSave = elem.getElementsByClassName("buttonSave")[0];
+	let childInputField = elem.getElementsByClassName("InputField")[0];
+	let childDivPanel = elem.getElementsByClassName("divPanel")[0];
+	childDivPanel.onmousedown = function(e)
 	{
 		e = e || window.event;
 		pauseEvent(e);
-		let shiftX = e.clientX - elem.getBoundingClientRect().left;
-		let shiftY = e.clientY - elem.getBoundingClientRect().top;
-		elem.style.position = "absolute";
-		elem.style.zIndex = 10000;
-		document.onmousemove = function(e) 
+
+		if (e.target == childDivPanel)
 		{
-			elem.style.left = e.pageX - shiftX + "px";
-			elem.style.top = e.pageY - shiftY + "px";	
+			let shiftX = e.clientX - elem.getBoundingClientRect().left;
+			let shiftY = e.clientY - elem.getBoundingClientRect().top;
+			elem.style.position = "absolute";
+			elem.style.zIndex = 10000;
+
+			document.onmousemove = function(e) 
+			{
+				elem.style.left = e.pageX - shiftX + "px";
+				elem.style.top = e.pageY - shiftY + "px";	
+			}
+			childDivPanel.onmouseup = function(e)
+			{
+				document.onmousemove = null;
+				childDivPanel.onmouseup = null;
+				socket.emit('move' , {
+					"id" : elem.id,
+					"x" : elem.style.left, 
+					"y" : elem.style.top
+				});
+			}
 		}
-		childElem.onmouseup = function()
+	}
+	elem.onclick = function(e)
+	{
+		if (e.target == childInputField)
 		{
-			document.onmousemove = null;
-			elem.onmouseup = null;
+			elem.style.zIndex = 10000;
 			socket.emit('move' , {
 				"id" : elem.id,
 				"x" : elem.style.left, 
 				"y" : elem.style.top
 			});
 		}
-	}
-	elem.onclick = function(e)
-	{
-		elem.style.zIndex = 10000;
-		socket.emit('move' , {
-			"id" : elem.id,
-			"x" : elem.style.left, 
-			"y" : elem.style.top
-		});
 	}
 }
 
@@ -80,16 +91,26 @@ function createElement(data)
 	divInput.contentEditable = true;
 	divInput.innerText = data["data"] ? data["data"] : "";
 
-	buttonClose.onclick = function() {
-		divMain.remove();
-		socket.emit('delete', {
-			"id" : divMain.id}); };
-	buttonSave.onclick = function() { 
-		socket.emit('save', {
-			"id" : divMain.id,
-			"data" : divInput.innerText,
-			"width" : divMain.style.width,
-			"height" : divMain.style.height}); };
+	buttonClose.onclick = function(e) {
+		if (e.target == buttonClose)
+		{
+			e.stopPropagation();
+			divMain.remove();
+			socket.emit('delete', {
+				"id" : divMain.id}); 
+		}
+	};
+	buttonSave.onclick = function(e) { 
+		if (e.target == buttonSave)
+		{
+			e.stopPropagation();
+			socket.emit('save', {
+				"id" : divMain.id,
+				"data" : divInput.innerText,
+				"width" : divMain.style.width,
+				"height" : divMain.style.height});
+		}
+	};
 
 	
 	document.body.appendChild(divMain);
@@ -148,7 +169,9 @@ socket.on('create', function(data) {
 });
 
 document.addEventListener('dblclick', function (e) {
+	if (e.target == document.documentElement)
+	{
 	const data = {"type" : "text", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px"};	
 	socket.emit('create', data);
-	
+	}
 });
