@@ -36,8 +36,9 @@ def create(data):
     field_data = data.get('data', '')
     field_type = data['type']
 
-    new_id = create_field(x, y, width, height, field_data, field_type)
-    data['id'] = new_id
+    new_field = create_field(x, y, width, height, field_data, field_type)
+    data['id'] = new_field.id
+    data['z'] = new_field.z_index
 
     emit('create', data, to=session['board_name'])
 
@@ -51,8 +52,12 @@ def move(data):
     current_field = Field.query.get_or_404(field_id)
     current_field.x = x
     current_field.y = y
+    field_list = list(filter(lambda f: f.board_id == current_field.board_id and f.id != current_field.id,
+                             Field.query.all()))
+    current_field.z_index = max([f.z_index for f in field_list]) + 1
     db.session.commit()
 
+    data['z'] = current_field
     emit('move', data, to=session['board_name'])
 
 
