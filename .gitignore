@@ -5,3 +5,4 @@ venv
 *.pyo
 migrations
 .log
+*.db-journal

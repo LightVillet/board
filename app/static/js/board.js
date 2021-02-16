@@ -5,6 +5,8 @@ function drag_n_drop (elem)
 	let childElem = elem.getElementsByClassName("divPanel")[0];
 	childElem.onmousedown = function(e)
 	{
+		e = e || window.event;
+		pauseEvent(e);
 		let shiftX = e.clientX - elem.getBoundingClientRect().left;
 		let shiftY = e.clientY - elem.getBoundingClientRect().top;
 		elem.style.position = "absolute";
@@ -27,12 +29,21 @@ function drag_n_drop (elem)
 	}
 	elem.onclick = function(e)
 	{
+		elem.style.zIndex = 10000;
 		socket.emit('move' , {
 			"id" : elem.id,
 			"x" : elem.style.left, 
 			"y" : elem.style.top
 		});
 	}
+}
+
+function pauseEvent(e){
+    if(e.stopPropagation) e.stopPropagation();
+    if(e.preventDefault) e.preventDefault();
+    e.cancelBubble=true;
+    e.returnValue=false;
+    return false;
 }
 
 
@@ -99,7 +110,8 @@ function editElement(data)
 function deleteElement(data)
 {
 	const elem = document.getElementById(data["id"]);
-	elem.remove();
+	if (elem)
+		elem.remove();
 };
 
 let socket = new io();
