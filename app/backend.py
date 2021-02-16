@@ -24,7 +24,11 @@ def create_field(x, y, height, width, data, field_type):
                       board_id=current_board.id)
     field_list = list(filter(lambda f: f.board_id == new_field.board_id and f.id != new_field.id,
                              Field.query.all()))
-    new_field.z_index = max([f.z_index for f in field_list]) + 1
+    field_list_z = [f.z_index for f in field_list]
+    if field_list_z:
+        new_field.z_index = max(field_list_z) + 1
+    else:
+        new_field.z_index = 1
     db.session.add(new_field)
     db.session.commit()
 
