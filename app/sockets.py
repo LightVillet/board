@@ -52,10 +52,14 @@ def move(data):
     current_field = Field.query.get_or_404(field_id)
     current_field.x = x
     current_field.y = y
+
     field_list = list(filter(lambda f: f.board_id == current_field.board_id and f.id != current_field.id,
                              Field.query.all()))
     field_list_z = [f.z_index for f in field_list]
-    current_field.z_index = max(field_list_z) + 1
+    if field_list_z:
+        current_field.z_index = max(field_list_z) + 1
+    else:
+        current_field.z_index = 1
     db.session.commit()
 
     data['z'] = current_field.z_index
