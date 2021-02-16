@@ -1,99 +1,92 @@
 "use strict"
+
 function drag_n_drop (elem)
 {
 	let childElem = elem.getElementsByClassName("divPanel")[0];
-	childElem.onmouseover = function(e)
+	childElem.onmousedown = function(e)
 	{
-//		console.log(elem.className, "over");
-		childElem.onmousedown = function(e)
+		let shiftX = e.clientX - elem.getBoundingClientRect().left;
+		let shiftY = e.clientY - elem.getBoundingClientRect().top;
+		elem.style.position = "absolute";
+		elem.style.zIndex = 10000;
+		document.onmousemove = function(e) 
 		{
-			let shiftX = e.clientX - elem.getBoundingClientRect().left;
-			let shiftY = e.clientY - elem.getBoundingClientRect().top;
-			//console.log(button_test.style.left + 0, button_test.style.top + 0, button_y, e.pageX, e.pageY);
-			elem.style.position = 'absolute';
-			moveAt(e);
-			elem.style.zIndex = 1000; 
-			function moveAt(e)
-			{
-					elem.style.left = e.pageX - shiftX + "px";
-					elem.style.top = e.pageY - shiftY + "px";	
-			}
-			document.onmousemove = function(e) 
-			{
-				moveAt(e);
-				
-			}
-			childElem.onmouseup = function()
-			{
-				document.onmousemove = null;
-				elem.onmouseup = null;
-				socket.emit('move' , {"id" : elem.id, "x" : elem.style.left, "y" : elem.style.top});
-			}
+			elem.style.left = e.pageX - shiftX + "px";
+			elem.style.top = e.pageY - shiftY + "px";	
+		}
+		childElem.onmouseup = function()
+		{
+			document.onmousemove = null;
+			elem.onmouseup = null;
+			socket.emit('move' , {
+				"id" : elem.id,
+				"x" : elem.style.left, 
+				"y" : elem.style.top
+			});
 		}
 	}
-	childElem.onmouseout = function(e)
+	elem.onclick = function(e)
 	{
-		let relatedTarget = e.relatedTarget;
-		while (relatedTarget) {
-			if (relatedTarget == elem)
-			{
-//				console.log(relatedTarget.className, "out");
-				elem.onmousedown = null;
-				return;
-			}
-		
-			relatedTarget = relatedTarget.parentNode;
-		  }
-
+		socket.emit('move' , {
+			"id" : elem.id,
+			"x" : elem.style.left, 
+			"y" : elem.style.top
+		});
 	}
 }
 
-
-function update(data)
-{
-	socket.emit('update', data);
-}
 
 function moveElement(data)
 {
 	const elem = document.getElementById(data["id"]);
 	elem.style.left = data["x"];
 	elem.style.top = data["y"];
-	elem.style.zIndex = 1000;
+	elem.style.zIndex = data["z"];
 }
 
 function createElement(data)
 {
-	const newDiv = document.createElement("div");
-	const newInput = document.createElement("div");
-	const panelDiv = document.createElement("div");
-	newDiv.className = "divMain";
-	panelDiv.className = "divPanel";
-	newInput.contentEditable = true;
-	newInput.innerText = data["data"] ? data["data"] : "";
-	document.body.appendChild(newDiv);
-	const ButtonClose = document.createElement("button");
-	ButtonClose.className = "buttonClose";
-	ButtonClose.onclick = function() { socket.emit('delete', {"id" : newDiv.id}); };
-	panelDiv.appendChild(ButtonClose);
-	const ButtonSave = document.createElement("button");
-	ButtonSave.className = "buttonClose";
-	ButtonSave.onclick = function() { socket.emit('save', {"id" : newDiv.id, "data" : newInput.innerText, "width" : newDiv.style.width, "height" : newDiv.style.height}); };
-	panelDiv.appendChild(ButtonSave);
-	newDiv.style.position = 'absolute';
-	newDiv.style.left = data["x"];
-	newDiv.style.top = data["y"];
-	newDiv.style.width = data["width"];
-	newDiv.style.height = data["height"];
-	newDiv.id = data["id"];
-	newInput.className = "inputField";
-	newDiv.append(panelDiv);
-	newDiv.append(newInput);
-	drag_n_drop(newDiv);
-	//ro.observe(newDiv);
+	const divMain = document.createElement("div");
+	const divInput = document.createElement("div");
+	const divPanel = document.createElement("div");
+	const buttonClose = document.createElement("button");
+	const buttonSave = document.createElement("button");
+
+	divMain.className = "divMain";
+	divInput.className = "inputField";
+	divPanel.className = "divPanel";
+	buttonClose.className = "button buttonClose";
+	buttonSave.className = "button buttonSave";
+
+	divMain.style.position = 'absolute';
+	divMain.style.left = data["x"];
+	divMain.style.top = data["y"];
+	divMain.style.zIndex = data["z"];
+	divMain.style.width = data["width"];
+	divMain.style.height = data["height"];
+	divMain.id = data["id"];
+
+	divInput.contentEditable = true;
+	divInput.innerText = data["data"] ? data["data"] : "";
+
+	buttonClose.onclick = function() { 
+		socket.emit('delete', {
+			"id" : divMain.id}); };
+	buttonSave.onclick = function() { 
+		socket.emit('save', {
+			"id" : divMain.id,
+			"data" : divInput.innerText,
+			"width" : divMain.style.width,
+			"height" : divMain.style.height}); };
+
+	
+	document.body.appendChild(divMain);
+	divMain.append(divPanel);
+	divPanel.appendChild(buttonClose);
+	divPanel.appendChild(buttonSave);
+	divMain.append(divInput);
+	drag_n_drop(divMain);
 };
-
-
 
 function editElement(data)
 {
@@ -119,11 +112,11 @@ socket.on('move', function(data) {
 	moveElement(data);
 });
 socket.on('init', function(data) {
-
-	for (let elem in data)
-	{
-		createElement(data[elem]);
-	}
+	let elems = document.getElementsByClassName("divMain");
+	for (let i = 0; i < elems.length; i++)
+		deleteElement(elems[i].id);
+	for (let i = 0; i < data.length; i++)
+		createElement(data[i]);
 });
 
 socket.on('save', function(data) {
@@ -146,16 +139,3 @@ document.addEventListener('dblclick', function (e) {
 	socket.emit('create', data);
 	
 });
-
-// var ro = new ResizeObserver(entries => {
-// 	for (let entry of entries) {
-// 	  const cr = entry.contentRect;
-// 	  const data = {"width" : cr.width, "height" : cr.height, "id" : entry.target.id};
-// 	  socket.emit('save', data);
-// 	}
-//   });
-// document.addEventListener("drop", function(e) {
-// 	const data = {"type" : "file", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px", "data" : "asd"};
-// 	console.log(data);	
-// 	socket.emit('create', data);
-// });

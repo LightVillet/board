@@ -2,6 +2,20 @@
 {
 	background:#3b718a;
 }
+
+.divMain
+{
+	background-color: rgb(247, 140, 0);
+	width: 300px;
+	height: 300px;
+	min-width: 60px;
+	min-height: 30px;
+	border: solid;
+	border-width: 1px;
+	resize: both;
+	overflow: hidden;
+}
+
 .inputField
 {
 	height: 100%;
@@ -11,29 +25,36 @@
 	overflow-y: auto;
 }
 
-.buttonClose
-{
-	margin-top: 2px;
-	margin-right: 2px;
-	height: 26px;
-	margin-right: 2px;
-	float: right;
-	background: url(../img/favicon.ico) no-repeat;
-}
-
-.divMain
-{
-	background-color: rgb(247, 140, 0);
-	width: 300px;
-	height: 300px;
-	border: solid;
-	border-width: 1px;
-	resize: both;
-	overflow: hidden;
-}
-
 .divPanel
 {
 	background-color: antiquewhite;
 	height: 30px;
+}
+
+.button
+{
+	margin-top: 2px;
+	margin-right: 2px;
+	width: 26px;
+	height: 26px;
+	margin-right: 2px;
+	float: right;
+	border-radius: 100%;
+}
+.button:hover
+{
+	border: solid;
+	border-radius:100%;
+	border-color: rgb(0, 0, 0);
+	border-width: 1px;
+}
+
+.buttonSave
+{
+	background: url(../img/save.png) no-repeat;
+}
+
+.buttonClose
+{
+	background: url(../img/close.png) no-repeat;
 }
