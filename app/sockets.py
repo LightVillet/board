@@ -58,7 +58,7 @@ def move(data):
     current_field.z_index = max(field_list_z) + 1
     db.session.commit()
 
-    data['z'] = current_field
+    data['z'] = current_field.z_index
     emit('move', data, to=session['board_name'])
 
 
