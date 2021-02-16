@@ -81,7 +81,7 @@ function createElement(data)
 	divInput.innerText = data["data"] ? data["data"] : "";
 
 	buttonClose.onclick = function() {
-		elem.remove();
+		divMain.remove();
 		socket.emit('delete', {
 			"id" : divMain.id}); };
 	buttonSave.onclick = function() { 
