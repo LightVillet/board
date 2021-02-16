@@ -80,7 +80,8 @@ function createElement(data)
 	divInput.contentEditable = true;
 	divInput.innerText = data["data"] ? data["data"] : "";
 
-	buttonClose.onclick = function() { 
+	buttonClose.onclick = function() {
+		elem.remove();
 		socket.emit('delete', {
 			"id" : divMain.id}); };
 	buttonSave.onclick = function() { 
