@@ -185,7 +185,16 @@ document.addEventListener('drop', function (e) {
 	reader.onload = function() {
 		let response = fetch('/upload_file', {
 			method: 'POST',
-			body: {"x" : e.pageX, "y" : e.pageY, "type" : "file", "height" : "100px", "width" : "100px", "data" : reader.result}
+			headers: {
+				'Content-Type': 'application/json'
+			  },
+			body: JSON.stringify({
+				"x" : e.pageX, 
+				"y" : e.pageY, 
+				"type" : "file", 
+				"height" : "100px", 
+				"width" : "100px", 
+				"data" : reader.result})
 		  });
 	}
 });
