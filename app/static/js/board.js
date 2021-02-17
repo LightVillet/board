@@ -110,9 +110,15 @@ function createElement(data)
 			// 	"data" : divInput.innerText,
 			// 	"width" : divMain.style.width,
 			// 	"height" : divMain.style.height});
-			socket.emit('download', {
-				"id" : divMain.id
-			});
+			fetch('/download', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				  },
+				body: JSON.stringify({
+					"id" : divMain.id
+				})
+			  });
 		}
 	};
 
@@ -194,7 +200,7 @@ document.addEventListener('drop', function (e) {
 	let reader = new FileReader();
 	reader.readAsDataURL(file);
 	reader.onload = function() {
-		let response = fetch('/upload_file', {
+		fetch('/upload', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
