@@ -183,11 +183,10 @@ document.addEventListener('drop', function (e) {
 	let reader = new FileReader();
 	reader.readAsDataURL(file);
 	reader.onload = function() {
-		let response = fetch('/upload', {
+		let response = fetch('/upload_file', {
 			method: 'POST',
-			body: new FormData(reader.result)
+			body: {"x" : e.pageX, "y" : e.pageY, "type" : "file", "height" : "100px", "width" : "100px", "data" : reader.result}
 		  });
-		console.log(responce.json());
 	}
 });
 
