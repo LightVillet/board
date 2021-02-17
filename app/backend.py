@@ -13,11 +13,12 @@ def get_board():
     return current_board
 
 
-def create_field(x, y, height, width, data, field_type):
+def create_field(x, y, height, width, data, field_type, field_name):
     current_board = get_board()
     new_field = Field(type=field_type,
                       x=x,
                       y=y,
+                      name=field_name,
                       data=data,
                       width=width,
                       height=height,

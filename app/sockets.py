@@ -18,7 +18,8 @@ def connect():
             'id': field.id,
             'x': field.x,
             'y': field.y,
-            'data': field.data,
+            'name': field.name,
+            'data': field.data if field.type == 'text' else 'FILE',
             'width': field.width,
             'height': field.height,
             'type': field.type
@@ -35,8 +36,9 @@ def create(data):
     height = data['height']
     field_data = data.get('data', '')
     field_type = data['type']
+    field_name = data['name']
 
-    new_field = create_field(x, y, width, height, field_data, field_type)
+    new_field = create_field(x, y, width, height, field_data, field_type, field_name)
     data['id'] = new_field.id
     data['z'] = new_field.z_index
 
@@ -86,6 +88,7 @@ def save(data):
     field_data = data.get('data', None)
     width = data.get('width', None)
     height = data.get('height', None)
+    field_name = data.get('name', None)
 
     current_field = Field.query.get_or_404(field_id)
     if data:
@@ -94,6 +97,8 @@ def save(data):
         current_field.width = width
     if height:
         current_field.height = height
+    if field_name:
+        current_field.name = field_name
     db.session.commit()
 
     emit('save', data, to=session['board_name'])
