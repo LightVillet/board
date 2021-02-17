@@ -175,3 +175,22 @@ document.addEventListener('dblclick', function (e) {
 	socket.emit('create', data);
 	}
 });
+
+document.addEventListener('drop', function (e) {
+	console.log('File dropped');
+	e.preventDefault();
+	let file = e.dataTransfer.items[0].getAsFile();
+	let reader = new FileReader();
+	reader.readAsDataURL(file);
+	reader.onload = function() {
+		let response = fetch('/upload', {
+			method: 'POST',
+			body: new FormData(reader.result)
+		  });
+		console.log(responce.json());
+	}
+});
+
+document.addEventListener('dragover', function (e) {
+	e.preventDefault();
+});
