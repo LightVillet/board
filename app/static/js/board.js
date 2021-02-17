@@ -89,7 +89,8 @@ function createElement(data)
 	divMain.id = data["id"];
 
 	divInput.contentEditable = true;
-	divInput.innerText = data["data"] ? data["data"] : "";
+	//divInput.innerText = data["data"] ? data["data"] : "";
+	divInput.innerText = data["name"];
 
 	buttonClose.onclick = function(e) {
 		if (e.target == buttonClose)
@@ -174,7 +175,14 @@ socket.on('create', function(data) {
 document.addEventListener('dblclick', function (e) {
 	if (e.target == document.documentElement)
 	{
-	const data = {"type" : "text", "x" : e.pageX, "y" : e.pageY, "height" : "300px", "width" : "300px"};	
+	const data = {
+		"type" : "text",
+		"x" : e.pageX,
+		"y" : e.pageY,
+		"height" : "300px",
+		"width" : "300px",
+		"name" : "asd"
+	};	
 	socket.emit('create', data);
 	}
 });
