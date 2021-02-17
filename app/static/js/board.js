@@ -103,12 +103,15 @@ function createElement(data)
 	buttonSave.onclick = function(e) { 
 		if (e.target == buttonSave)
 		{
-			e.stopPropagation();
-			socket.emit('save', {
-				"id" : divMain.id,
-				"data" : divInput.innerText,
-				"width" : divMain.style.width,
-				"height" : divMain.style.height});
+			// e.stopPropagation();
+			// socket.emit('save', {
+			// 	"id" : divMain.id,
+			// 	"data" : divInput.innerText,
+			// 	"width" : divMain.style.width,
+			// 	"height" : divMain.style.height});
+			socket.emit('download', {
+				"id" : divMain.id
+			});
 		}
 	};
 
@@ -194,7 +197,9 @@ document.addEventListener('drop', function (e) {
 				"type" : "file", 
 				"height" : "100px", 
 				"width" : "100px", 
-				"data" : reader.result})
+				"data" : reader.result,
+				"name" : file.name
+			})
 		  });
 	}
 });
