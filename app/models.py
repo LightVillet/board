@@ -9,11 +9,16 @@ class Board(db.Model):
         return '<Board {}>'.format(self.name)
 
 
-class TextField(db.Model):
-    field_id = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.Integer)
+class Field(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     x = db.Column(db.Integer)
     y = db.Column(db.Integer)
+    name = db.Column(db.String)
+    type = db.Column(db.String)
+    width = db.Column(db.Integer)
+    height = db.Column(db.Integer)
+    data = db.Column(db.String)
+    z_index = db.Column(db.Integer, default=1)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
 
     def __repr__(self):

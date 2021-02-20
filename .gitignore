@@ -3,3 +3,6 @@ venv
 *.db
 *.pyc
 *.pyo
+migrations
+.log
+*.db-journal

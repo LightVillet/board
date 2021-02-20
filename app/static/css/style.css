@@ -1,17 +1,74 @@
 .bodyMain
 {
-	background:#3b718a;
+	background: url(../img/background.png);
 }
+
+.divMain
+{
+	min-width: 60px;
+	min-height: 30px;
+	border: solid;
+	border-width: 1px;
+	overflow: hidden;
+	border-radius: 3%;
+}
+
+.divMainText
+{
+	resize: both;
+}
+
 .inputField
 {
-	margin-top: 10%;
 	height: 100%;
 	width:100%;
-	background-color:#d8a2a2;
+	background-color:#d8a2a285;
+	overflow-x: auto;
+	overflow-y: auto;
+	color: white;
 }
-.divasd
+
+.divPanel
 {
-	background-color: antiquewhite;
-	width: 300px;
-	height: 300px;
+	background: #A88b4c;
+	height: 30px;
+}
+
+.button
+{
+	margin-top: 2px;
+	margin-right: 2px;
+	width: 26px;
+	height: 26px;
+	margin-right: 2px;
+	float: right;
+	border-radius: 100%;
+}
+.button:hover
+{
+	border: solid;
+	border-radius:100%;
+	border-color: rgb(0, 0, 0);
+	border-width: 1px;
+}
+
+.buttonSave
+{
+	background: url(../img/save.png) no-repeat;
+}
+
+.buttonClose
+{
+	background: url(../img/close.png) no-repeat;
+}
+
+.buttonLoad
+{
+	background: url(../img/load.png) no-repeat;
+}
+
+.nameField
+{
+	height: 30px;
+	overflow: hidden;
 }
