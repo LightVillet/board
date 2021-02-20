@@ -1,33 +1,36 @@
 .bodyMain
 {
-	background:#3b718a;
+	background: url(../img/background.png);
 }
 
 .divMain
 {
-	background-color: rgb(247, 140, 0);
-	width: 300px;
-	height: 300px;
 	min-width: 60px;
 	min-height: 30px;
 	border: solid;
 	border-width: 1px;
-	resize: both;
 	overflow: hidden;
+	border-radius: 3%;
+}
+
+.divMainText
+{
+	resize: both;
 }
 
 .inputField
 {
 	height: 100%;
 	width:100%;
-	background-color:#d8a2a2;
+	background-color:#d8a2a285;
 	overflow-x: auto;
 	overflow-y: auto;
+	color: white;
 }
 
 .divPanel
 {
-	background-color: antiquewhite;
+	background: #A88b4c;
 	height: 30px;
 }
 
@@ -57,4 +60,15 @@
 .buttonClose
 {
 	background: url(../img/close.png) no-repeat;
+}
+
+.buttonLoad
+{
+	background: url(../img/load.png) no-repeat;
+}
+
+.nameField
+{
+	height: 30px;
+	overflow: hidden;
 }

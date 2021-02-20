@@ -55,7 +55,7 @@ def upload():
     field_data = field_data.split('base64,')[1]
     field_name = data['name']
 
-    new_field = create_field(x, y, width, height, field_data, field_type, field_name)
+    new_field = create_field(x, y, height, width, field_data, field_type, field_name)
     data['id'] = new_field.id
     data['z'] = new_field.z_index
 
