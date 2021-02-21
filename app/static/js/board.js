@@ -196,9 +196,9 @@ socket.on('move', function(data) {
 });
 socket.on('init', function(data) {
 	let elems = document.getElementsByClassName("divMain");
-	for (let i = 0; i < elems.length; i++)
+	while (elems.length != 0)
 		deleteElement({
-			"id" : elems[i].id});
+			"id" : elems[0].id});
 	for (let i = 0; i < data.length; i++) {
 		console.log(data);
 		if (data[i]["type"] == "text")
